@@ -1,0 +1,22 @@
+.gradient-custom-2 {
+
+    background: linear-gradient(to bottom right, #6A0B93, #E6E6FA);
+    
+    }
+    
+    @media (min-width: 768px) {
+    .gradient-form {
+    height: 100vh !important;
+    }
+    }
+    @media (min-width: 769px) {
+    .gradient-custom-2 {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+    }
+    }
+
+#recovery{
+    padding-top: 70px;
+    background-image: url('/img/kilo.jpg'); /* Cambia este URL por una imagen de fondo real */
+}

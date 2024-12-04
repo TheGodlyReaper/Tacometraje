@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Modular de Rutas y Kilómetros</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .active-nav {
+            background-color: #5b2c74;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+    <!-- Barra de Navegación Superior -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-800">Dashboard de Rutas</h1>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="changeView('general')" class="nav-button px-4 py-2 rounded active-nav" id="btn-general">
+                        Vista General
+                    </button>
+                    <button onclick="changeView('detallado')" class="nav-button px-4 py-2 rounded" id="btn-detallado">
+                        Vista Detallada
+                    </button>
+                    <button onclick="changeView('mapas')" class="nav-button px-4 py-2 rounded" id="btn-mapas">
+                        Mapas
+                    </button>
+                    <button onclick="changeView('estadisticas')" class="nav-button px-4 py-2 rounded" id="btn-estadisticas">
+                        Estadísticas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal de Iframe -->
+    <div id="iframe-container" class="flex-grow p-4">
+        <iframe 
+            id="content-frame" 
+            src="{{ url_for('vista_general') }}" 
+            class="w-full h-full border-2 border-gray-200 rounded-lg"
+        ></iframe>
+    </div>
+
+    <script>
+        function changeView(view) {
+            // Remover clase active de todos los botones
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active-nav');
+            });
+
+            // Agregar clase active al botón seleccionado
+            document.getElementById(`btn-${view}`).classList.add('active-nav');
+
+            // Cambiar el iframe según la vista seleccionada
+            const iframe = document.getElementById('content-frame');
+            
+            switch(view) {
+                case 'general':
+                    iframe.src = "{{ url_for('vista_general') }}";
+                    break;
+                case 'detallado':
+                    iframe.src = "{{ url_for('vista_detallada') }}";
+                    break;
+                case 'mapas':
+                    iframe.src = "{{ url_for('map_view') }}";
+                    break;
+                case 'estadisticas':
+                    iframe.src = "{{ url_for('vista_estadisticas') }}";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

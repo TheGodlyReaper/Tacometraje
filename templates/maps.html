@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Rutas de Técnicos</title>
+  <style>
+    /* Estilo para el mapa */
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h2>Ubicaciones de Técnicos</h2>
+  <div id="map"></div>
+
+  <!-- Incluir la API de Google Maps -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3zAh3ZKHhSojuQqflqR82qo0ulOLoxaY&callback=initMap" async defer></script>
+
+  <script>
+    let map;
+    let markers = {};  // Objeto para guardar los marcadores de cada técnico
+
+    // Función para inicializar el mapa
+    function initMap() {
+      // Coordenadas centradas en Costa Rica
+      const costaRica = { lat: 9.19, lng: -83.75 };
+      
+      // Crear el mapa
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: costaRica
+      });
+
+      fetch('/travel-routes')
+        .then(response => response.json())
+        .then(data => {
+          // Para cada técnico, mostrar el último punto en el mapa
+          data.forEach(route => {
+            const { technician_name, latitude, longitude } = route;
+
+            // Verificar si las coordenadas son válidas (números)
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+              // Si ya hay un marcador para este técnico, actualízalo; si no, créalo
+              if (markers[technician_name]) {
+                markers[technician_name].setPosition(new google.maps.LatLng(latitude, longitude));
+              } else {
+                // Crear un marcador con forma de círculo
+                const marker = new google.maps.Marker({
+                  position: { lat: latitude, lng: longitude },
+                  map: map,
+                  title: `Técnico: ${technician_name}`,  // Aquí usamos el nombre del técnico
+                  icon: {
+                    path: google.maps.SymbolPath.CIRCLE,  // Usar un círculo como marcador
+                    fillColor: 'red',                     // Color del relleno del círculo
+                    fillOpacity: 1,                       // Opacidad del relleno
+                    scale: 10,                            // Tamaño del círculo
+                    strokeColor: 'white',                 // Color del borde
+                    strokeWeight: 2                       // Grosor del borde
+                  }
+                });
+
+                // Crear un InfoWindow con contenido personalizado
+                const infoWindow = new google.maps.InfoWindow({
+                  content: `<div><strong>Técnico: ${technician_name}</strong><br>Ubicación: ${latitude}, ${longitude}</div>`
+                });
+
+                // Agregar un evento de clic sobre el marcador
+                marker.addListener('click', function() {
+                  infoWindow.open(map, marker);  // Mostrar el InfoWindow al hacer clic en el marcador
+                });
+
+                // Guardar el marcador para este técnico
+                markers[technician_name] = marker;
+              }
+            } else {
+              console.error('Coordenadas inválidas para el técnico:', technician_name, latitude, longitude);
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error obteniendo las ubicaciones de los técnicos:', error);
+        });
+    }
+  </script>
+
+</body>
+</html>

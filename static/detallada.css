@@ -1,0 +1,60 @@
+:root {
+    --primary-color: #5b2c74;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --background-light: #ecf0f1;
+    --text-dark: #2c3e50;
+}
+
+body {
+    background-color: var(--background-light);
+    color: var(--text-dark);
+}
+
+.table-container {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 80%, black);
+    border-color: color-mix(in srgb, var(--primary-color) 80%, black);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: color-mix(in srgb, var(--primary-color) 10%, white);
+}
+
+.table-bordered th, .table-bordered td {
+    border-color: var(--primary-color);
+}
+
+select.form-select, input.form-control {
+    border-color: var(--primary-color);
+}
+
+select.form-select:focus, input.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px var(--secondary-color);
+}
+
+table th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Additional subtle enhancements for the new color scheme */
+.modal-header {
+    background-color: color-mix(in srgb, var(--primary-color) 20%, white);
+    color: var(--primary-color);
+}
+
+.modal-footer {
+    background-color: color-mix(in srgb, var(--primary-color) 10%, white);
+}
